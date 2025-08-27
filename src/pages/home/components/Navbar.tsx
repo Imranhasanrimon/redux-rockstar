@@ -7,6 +7,7 @@ import {
     MenubarShortcut,
     MenubarTrigger,
 } from "@/components/ui/menubar"
+import { ModeToggle } from "@/components/ui/mode-toggle"
 import { Link } from "react-router-dom"
 
 export default function Navbar() {
@@ -32,6 +33,7 @@ export default function Navbar() {
                     <MenubarTrigger>Borrow Summary</MenubarTrigger>
                 </MenubarMenu>
             </Link>
+            <ModeToggle />
         </Menubar>
     )
 }

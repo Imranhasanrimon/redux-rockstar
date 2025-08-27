@@ -1,3 +1,5 @@
+import AddBook from "@/pages/add-book/AddBook";
+import Books from "@/pages/books/Books";
 import Home from "@/pages/home/Home";
 import { createBrowserRouter } from "react-router-dom";
 
@@ -9,11 +11,11 @@ export const router = createBrowserRouter([
         children: [
             {
                 path: "books",
-                element: <h1>books</h1>
+                element: <Books />
             },
             {
                 path: "create-book",
-                element: <h1>Add books</h1>
+                element: <AddBook />
             },
             {
                 path: "borrow-summary",

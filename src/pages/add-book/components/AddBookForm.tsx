@@ -21,18 +21,6 @@ import {
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 
-//  {
-//             "_id": "687a560cd6564322e83f938a",
-//             "title": "Eat That Frog",
-//             "author": "Stephen Hawking",
-//             "genre": "NON_FICTION",
-//             "isbn": "9780553380135",
-//             "description": "It helps improving productivity.",
-//             "copies": 20,
-//             "available": false,
-//             "createdAt": "2025-07-18T14:11:24.880Z",
-//             "updatedAt": "2025-07-19T16:04:00.619Z"
-//  }
 
 const formSchema = z.object({
     title: z.string().min(2, {
@@ -50,7 +38,7 @@ const formSchema = z.object({
     description: z.string().min(5, {
         message: "Description must be at least 5 characters.",
     }),
-    copies: z.number().min(0, {
+    copies: z.number().min(1, {
         message: "Copies must be a positive number.",
     }),
     available: z.boolean(),
@@ -154,7 +142,7 @@ export default function AddBookForm() {
                         </FormItem>
                     )}
                 />
-                <FormField
+                {/* <FormField
                     control={form.control}
                     name="copies"
                     render={({ field }) => (
@@ -166,7 +154,25 @@ export default function AddBookForm() {
                             <FormMessage />
                         </FormItem>
                     )}
+                /> */}
+                <FormField
+                    control={form.control}
+                    name="copies"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Number of Copies</FormLabel>
+                            <FormControl>
+                                <Input
+                                    type="number"
+                                    {...field}
+                                    onChange={(e) => field.onChange(Number(e.target.value))}
+                                />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
                 />
+
                 <Button variant="secondary" type="submit" className="w-full">Submit</Button>
             </form>
         </Form>

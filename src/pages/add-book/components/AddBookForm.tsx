@@ -20,6 +20,7 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
+import { useAddBookMutation } from "@/redux/api/features/bookApi"
 
 
 const formSchema = z.object({
@@ -46,6 +47,7 @@ const formSchema = z.object({
 
 
 export default function AddBookForm() {
+    const [addBook, { isLoading }] = useAddBookMutation()
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -59,11 +61,11 @@ export default function AddBookForm() {
         },
     })
 
-    const onSubmit = (values: z.infer<typeof formSchema>) => {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        console.log(values)
+    const onSubmit = async (values: z.infer<typeof formSchema>) => {
+        const res = await addBook(values)
+        console.log(res)
     }
+
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">

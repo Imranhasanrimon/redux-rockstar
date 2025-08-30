@@ -27,7 +27,7 @@ export const bookApi = createApi({
         }),
         editBook: build.mutation({
             query: (data) => ({
-                url: `books/$${data._id}`,
+                url: `books/${data._id}`,
                 method: "PUT",
                 body: data.body
             }),

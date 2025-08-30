@@ -2,8 +2,9 @@
 import { type ColumnDef } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button"
 import { useNavigate } from "react-router-dom"
-import { Edit, Trash } from "lucide-react";
+import { Edit, LoaderCircle, Trash } from "lucide-react";
 import { useDeleteBookMutation } from "@/redux/api/features/bookApi";
+import UpdateBookModal from "./UpdateBookModal";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -57,17 +58,10 @@ export const columns: ColumnDef<IBook>[] = [
         cell: ({ row }) => {
 
             const book = row.original as IBook
-            const navigate = useNavigate()
 
             return (
-                <div className="flex gap-2">
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => navigate("/")}
-                    >
-                        <Edit />
-                    </Button>
+                <div>
+                    <UpdateBookModal book={book} />
                 </div>
             )
         },
@@ -76,17 +70,19 @@ export const columns: ColumnDef<IBook>[] = [
         id: "delete",
         header: "Delete",
         cell: ({ row }) => {
-            const [deleteBook, { }] = useDeleteBookMutation()
+            const [deleteBook, { isLoading }] = useDeleteBookMutation()
             const book = row.original as IBook
 
             return (
-                <div className="flex gap-2">
+                <div>
                     <Button
                         variant="ghost"
                         size="sm"
                         onClick={() => deleteBook(book._id)}
                     >
-                        < Trash className="text-red-500" />
+                        {isLoading ?
+                            <LoaderCircle className="animate-spin text-red-500" /> :
+                            < Trash className="text-red-500" />}
                     </Button>
                 </div>
             )
@@ -100,7 +96,7 @@ export const columns: ColumnDef<IBook>[] = [
             const navigate = useNavigate()
 
             return (
-                <div className="flex gap-2">
+                <div>
                     <Button
                         variant="outline"
                         size="sm"

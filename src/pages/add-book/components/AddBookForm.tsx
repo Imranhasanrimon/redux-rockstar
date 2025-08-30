@@ -144,19 +144,6 @@ export default function AddBookForm() {
                         </FormItem>
                     )}
                 />
-                {/* <FormField
-                    control={form.control}
-                    name="copies"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Number of Copies</FormLabel>
-                            <FormControl>
-                                <Input placeholder="shadcn" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                /> */}
                 <FormField
                     control={form.control}
                     name="copies"

@@ -75,7 +75,6 @@ export default function UpdateBookForm({ book, setOpen }: UpdateBookModalProps) 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         const res = await editBook({ _id: book._id, body: values })
 
-        console.log(res);
 
         toast("Book has been Updated", {
             description: formatDate(res.data.data.updatedAt),
@@ -88,8 +87,8 @@ export default function UpdateBookForm({ book, setOpen }: UpdateBookModalProps) 
 
     return (
         isLoading ?
-            <div className="flex justify-center animate-spin my-10">
-                <LoaderCircle size={70} />
+            <div className="flex justify-center  my-10">
+                <LoaderCircle className="animate-spin" size={70} />
             </div>
             :
             <Form {...form}>

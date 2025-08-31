@@ -90,8 +90,8 @@ export default function AddBookForm({ setOpen }: AddBookFormProps) {
 
     return (
         isLoading ?
-            <div className="flex justify-center animate-spin my-10">
-                <LoaderCircle size={70} />
+            <div className="flex justify-center my-10">
+                <LoaderCircle className="animate-spin" size={70} />
             </div>
             : <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">

@@ -1,3 +1,4 @@
+import App from "@/App";
 import AddBook from "@/pages/add-book/AddBook";
 import Books from "@/pages/books/Books";
 import Home from "@/pages/home/Home";
@@ -6,9 +7,13 @@ import { createBrowserRouter } from "react-router-dom";
 export const router = createBrowserRouter([
     {
         path: "/",
-        element: <Home />,
+        element: <App />,
         errorElement: <h1>something went wrong</h1>,
         children: [
+            {
+                path: "",
+                element: <Home />
+            },
             {
                 path: "books",
                 element: <Books />

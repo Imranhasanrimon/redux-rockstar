@@ -1,13 +1,11 @@
-import { Outlet } from "react-router-dom";
-import Navbar from "./components/Navbar";
+import Books from "../books/Books";
+import Banner from "./components/Banner";
 
 export default function Home() {
     return (
         <div>
-            <Navbar />
-            <div className="w-11/12 mx-auto">
-                <Outlet />
-            </div>
+            <Banner />
+            <Books />
         </div>
     )
 }

@@ -2,13 +2,16 @@ import { useGetBooksQuery } from "@/redux/api/features/bookApi";
 import AddNewBookModal from "./components/AddNewBookModal";
 import { DataTable } from "./components/DataTable";
 import { columns } from "./components/Columns";
+import { LoaderCircle } from "lucide-react";
 
 
 export default function Books() {
     const { data, isLoading } = useGetBooksQuery(undefined);
 
     if (isLoading) {
-        return <h1>Loading...</h1>
+        return <div className=" h-[calc(100vh-200px)] flex justify-center items-center">
+            <LoaderCircle size={70} className="animate-spin" />
+        </div>
     }
     return (
         <div>

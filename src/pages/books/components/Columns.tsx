@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom"
 import { Edit, LoaderCircle, Trash } from "lucide-react";
 import { useDeleteBookMutation } from "@/redux/api/features/bookApi";
 import UpdateBookModal from "./UpdateBookModal";
+import { toast } from "sonner";
+import { formatDate } from "@/utils/formateDate";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -70,15 +72,32 @@ export const columns: ColumnDef<IBook>[] = [
         id: "delete",
         header: "Delete",
         cell: ({ row }) => {
-            const [deleteBook, { isLoading }] = useDeleteBookMutation()
+            const [deleteBook, { isLoading, }] = useDeleteBookMutation()
             const book = row.original as IBook
+            const handleDelete = async () => {
+                try {
+                    await deleteBook(book._id).unwrap() // unwrap waits for success/error
+                    toast("Book has been deleted", {
+                        description: formatDate(new Date().toISOString()),
+                        action: {
+                            label: "Close",
+                            onClick: () => console.log("closed"),
+                        },
+                    })
+                } catch (err) {
+                    toast.error("Failed to delete book")
+                    console.error(err)
+                }
+            }
+
 
             return (
                 <div>
                     <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => deleteBook(book._id)}
+                        onClick={handleDelete}
+                        disabled={isLoading}
                     >
                         {isLoading ?
                             <LoaderCircle className="animate-spin text-red-500" /> :

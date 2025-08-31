@@ -21,6 +21,10 @@ import {
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { useAddBookMutation } from "@/redux/api/features/bookApi"
+import { useEffect, type Dispatch, type SetStateAction } from "react"
+import { LoaderCircle } from "lucide-react"
+import { toast } from "sonner"
+import { formatDate } from "@/utils/formateDate"
 
 
 const formSchema = z.object({
@@ -45,9 +49,19 @@ const formSchema = z.object({
     available: z.boolean(),
 })
 
+type AddBookFormProps = {
+    setOpen?: Dispatch<SetStateAction<boolean>>
+}
 
-export default function AddBookForm() {
-    const [addBook, { isLoading }] = useAddBookMutation()
+export default function AddBookForm({ setOpen }: AddBookFormProps) {
+    const [addBook, { isLoading, isSuccess }] = useAddBookMutation()
+
+    useEffect(() => {
+        if (isSuccess) {
+            setOpen?.(false);
+        }
+    }, [isSuccess, setOpen]);
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -63,107 +77,119 @@ export default function AddBookForm() {
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         const res = await addBook(values)
-        console.log(res)
+
+        toast("Book has been added", {
+            description: formatDate(res.data.data.createdAt),
+            action: {
+                label: "Close",
+                onClick: () => console.log("closed"),
+            },
+        })
+
     }
 
     return (
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                <FormField
-                    control={form.control}
-                    name="title"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Book Title</FormLabel>
-                            <FormControl>
-                                <Input placeholder="Title Of The Book" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="author"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Author</FormLabel>
-                            <FormControl>
-                                <Input placeholder="Book Author Name" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="genre"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Genre</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                <SelectTrigger className="w-full">
-                                    <SelectValue placeholder="Genre" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="FICTION">FICTION</SelectItem>
-                                    <SelectItem value="NON_FICTION">NON_FICTION</SelectItem>
-                                    <SelectItem value="SCIENCE">SCIENCE</SelectItem>
-                                    <SelectItem value="HISTORY">HISTORY</SelectItem>
-                                    <SelectItem value="BIOGRAPHY">BIOGRAPHY</SelectItem>
-                                    <SelectItem value="FANTASY">FANTASY</SelectItem>
-                                </SelectContent>
-                            </Select>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="isbn"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>ISBN</FormLabel>
-                            <FormControl>
-                                <Input placeholder="shadcn" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="description"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Description</FormLabel>
-                            <FormControl>
-                                <Textarea placeholder="Describe Your Book In A Few Words" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="copies"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Number of Copies</FormLabel>
-                            <FormControl>
-                                <Input
-                                    type="number"
-                                    {...field}
-                                    onChange={(e) => field.onChange(Number(e.target.value))}
-                                />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+        isLoading ?
+            <div className="flex justify-center animate-spin my-10">
+                <LoaderCircle size={70} />
+            </div>
+            : <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                    <FormField
+                        control={form.control}
+                        name="title"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Book Title</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Title Of The Book" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="author"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Author</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Book Author Name" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="genre"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Genre</FormLabel>
+                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Genre" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="FICTION">FICTION</SelectItem>
+                                        <SelectItem value="NON_FICTION">NON_FICTION</SelectItem>
+                                        <SelectItem value="SCIENCE">SCIENCE</SelectItem>
+                                        <SelectItem value="HISTORY">HISTORY</SelectItem>
+                                        <SelectItem value="BIOGRAPHY">BIOGRAPHY</SelectItem>
+                                        <SelectItem value="FANTASY">FANTASY</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="isbn"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>ISBN</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="shadcn" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="description"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Description</FormLabel>
+                                <FormControl>
+                                    <Textarea placeholder="Describe Your Book In A Few Words" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="copies"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Number of Copies</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        type="number"
+                                        {...field}
+                                        onChange={(e) => field.onChange(Number(e.target.value))}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
 
-                <Button variant="secondary" type="submit" className="w-full">Submit</Button>
-            </form>
-        </Form>
+                    <Button variant="secondary" type="submit" className="w-full">Submit</Button>
+                </form>
+            </Form>
     )
 }

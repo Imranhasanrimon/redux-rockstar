@@ -12,7 +12,7 @@ import { Link } from "react-router-dom"
 
 export default function Navbar() {
     return (
-        <Menubar>
+        <Menubar className="justify-center">
             <Link to="/">
                 <MenubarMenu>
                     <MenubarTrigger>Home</MenubarTrigger>

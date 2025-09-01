@@ -14,7 +14,7 @@ export default function Books() {
         </div>
     }
     return (
-        <div>
+        <div className="max-w-7xl mx-auto w-11/12">
             <h1 className="text-3xl my-5 text-center font-semibold">List of Books ({data.data.length})</h1>
             <div className="my-5 flex items-center justify-center animate-pulse">
                 <AddNewBookModal />

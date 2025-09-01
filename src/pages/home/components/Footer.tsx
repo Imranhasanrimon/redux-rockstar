@@ -20,7 +20,7 @@ export default function Footer() {
                         Borrow Summary
                     </Link>
                     <a
-                        href="https://github.com/your-repo"
+                        href="https://github.com/Imranhasanrimon/redux-rockstar"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="hover:text-foreground transition"

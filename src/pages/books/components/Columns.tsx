@@ -2,11 +2,12 @@
 import { type ColumnDef } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button"
 import { useNavigate } from "react-router-dom"
-import { Edit, LoaderCircle, Trash } from "lucide-react";
+import { LoaderCircle, Trash } from "lucide-react";
 import { useDeleteBookMutation } from "@/redux/api/features/bookApi";
 import UpdateBookModal from "./UpdateBookModal";
 import { toast } from "sonner";
 import { formatDate } from "@/utils/formateDate";
+import { cn } from "@/lib/utils";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -51,8 +52,24 @@ export const columns: ColumnDef<IBook>[] = [
         header: "Copies",
     },
     {
-        accessorKey: "available",
+        id: "available",
         header: "Available",
+        cell: ({ row }) => {
+            const book = row.original as IBook
+
+            return (
+                <span
+                    className={cn(
+                        "text-sm px-3 py-1 rounded-full",
+                        book.available
+                            ? "bg-green-500/20 text-green-600"
+                            : "bg-red-500/20 text-red-600"
+                    )}
+                >
+                    {book.available ? "Available" : "Unavailable"}
+                </span>
+            )
+        },
     },
     {
         id: "update",
@@ -119,7 +136,7 @@ export const columns: ColumnDef<IBook>[] = [
                     <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => navigate(`/edit-book/${book._id}`)}
+                        onClick={() => navigate(`/borrow/${book._id}`)}
                         className="text-green-500"
                     >Borrow
                     </Button>

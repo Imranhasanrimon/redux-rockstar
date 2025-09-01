@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { BookOpen, User, Calendar, Hash, LoaderCircle } from "lucide-react"
 import { formatDate } from "@/utils/formateDate"
 import { useGetBookQuery } from "@/redux/api/features/bookApi"
+import UpdateBookModal from "../books/components/UpdateBookModal"
 
 export default function BookDetails() {
     const { id } = useParams<{ id: string }>()
@@ -74,6 +75,7 @@ export default function BookDetails() {
                             </Button>
                         </div>
                     </div>
+                    {/* <UpdateBookModal book={book} /> */}
                 </CardContent>
             </Card>
         </div>

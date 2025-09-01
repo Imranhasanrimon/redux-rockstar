@@ -1,45 +1,55 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { baseApi } from "./baseApi";
 
-// Define a service using a base URL and expected endpoints
-export const bookApi = createApi({
-    reducerPath: 'bookApi',
-    tagTypes: ["books"],
-    baseQuery: fetchBaseQuery({ baseUrl: 'https://library-management-cyan-pi.vercel.app/api/' }),
-    endpoints: (build) => ({
-        getBooks: build.query({
+export const bookApi = baseApi.injectEndpoints({
+    endpoints: (builder) => ({
+        getBooks: builder.query({
             query: () => "books",
-            providesTags: ["books"]
+            providesTags: (result) =>
+                result
+                    ? [
+                        ...result.data.map((book: any) => ({ type: "Books", id: book._id })),
+                        { type: "Books", id: "LIST" },
+                    ]
+                    : [{ type: "Books", id: "LIST" }],
         }),
-        getBook: build.query({
-            query: (id) => `books/${id}`,
-            providesTags: ["books"]
+
+        getBook: builder.query({
+            query: (id: string) => `books/${id}`,
+            providesTags: (result, error, id) => [{ type: "Books", id }],
         }),
-        addBook: build.mutation({
+
+        addBook: builder.mutation({
             query: (body) => ({
                 url: "books",
-                method: 'POST',
+                method: "POST",
                 body,
             }),
-            invalidatesTags: ['books']
+            invalidatesTags: [{ type: "Books", id: "LIST" }],
         }),
-        deleteBook: build.mutation({
-            query: (id) => ({
+
+        deleteBook: builder.mutation({
+            query: (id: string) => ({
                 url: `books/${id}`,
-                method: "DELETE"
+                method: "DELETE",
             }),
-            invalidatesTags: ["books"]
+            invalidatesTags: (result, error, id) => [{ type: "Books", id }],
         }),
-        editBook: build.mutation({
-            query: (data) => ({
+
+        editBook: builder.mutation({
+            query: (data: { _id: string; body: any }) => ({
                 url: `books/${data._id}`,
                 method: "PUT",
-                body: data.body
+                body: data.body,
             }),
-            invalidatesTags: ["books"]
-        })
+            invalidatesTags: (result, error, { _id }) => [{ type: "Books", id: _id }],
+        }),
     }),
-})
+});
 
-// Export hooks for usage in functional components, which are
-// auto-generated based on the defined endpoints
-export const { useGetBooksQuery, useGetBookQuery, useAddBookMutation, useDeleteBookMutation, useEditBookMutation } = bookApi
+export const {
+    useGetBooksQuery,
+    useGetBookQuery,
+    useAddBookMutation,
+    useDeleteBookMutation,
+    useEditBookMutation,
+} = bookApi;

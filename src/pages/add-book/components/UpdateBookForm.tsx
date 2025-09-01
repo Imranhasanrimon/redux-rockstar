@@ -52,12 +52,8 @@ const formSchema = z.object({
 
 
 export default function UpdateBookForm({ book, setOpen }: UpdateBookModalProps) {
-    const [editBook, { isLoading, isSuccess }] = useEditBookMutation();
-    useEffect(() => {
-        if (isSuccess) {
-            setOpen?.(false);
-        }
-    }, [isSuccess, setOpen]);
+    const [editBook, { isLoading, isSuccess, data }] = useEditBookMutation();
+
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -73,17 +69,28 @@ export default function UpdateBookForm({ book, setOpen }: UpdateBookModalProps) 
     })
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
-        const res = await editBook({ _id: book._id, body: values })
+        const body = {
+            ...values,
+            available: values.copies > 0
+        }
 
+        await editBook({ _id: book._id, body })
 
-        toast("Book has been Updated", {
-            description: formatDate(res.data.data.updatedAt),
-            action: {
-                label: "Close",
-                onClick: () => console.log("closed"),
-            },
-        })
     }
+
+    useEffect(() => {
+        if (isSuccess) {
+            setOpen?.(false);
+            form.reset();
+            toast("Book has been Updated", {
+                description: formatDate(data.data.updatedAt),
+                action: {
+                    label: "Close",
+                    onClick: () => console.log("closed"),
+                },
+            })
+        }
+    }, [isSuccess, setOpen]);
 
     return (
         isLoading ?

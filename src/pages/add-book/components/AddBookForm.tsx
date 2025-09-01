@@ -27,6 +27,7 @@ import { toast } from "sonner"
 import { formatDate } from "@/utils/formateDate"
 
 
+
 const formSchema = z.object({
     title: z.string().min(2, {
         message: "Book title must be at least 2 characters.",
@@ -54,13 +55,7 @@ type AddBookFormProps = {
 }
 
 export default function AddBookForm({ setOpen }: AddBookFormProps) {
-    const [addBook, { isLoading, isSuccess }] = useAddBookMutation()
-
-    useEffect(() => {
-        if (isSuccess) {
-            setOpen?.(false);
-        }
-    }, [isSuccess, setOpen]);
+    const [addBook, { isLoading, isSuccess, data }] = useAddBookMutation()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -76,17 +71,24 @@ export default function AddBookForm({ setOpen }: AddBookFormProps) {
     })
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
-        const res = await addBook(values)
-
-        toast("Book has been added", {
-            description: formatDate(res.data.data.createdAt),
-            action: {
-                label: "Close",
-                onClick: () => console.log("closed"),
-            },
-        })
+        await addBook({ ...values, available: values.copies > 0 })
 
     }
+
+
+    useEffect(() => {
+        if (isSuccess) {
+            setOpen?.(false);
+            form.reset()
+            toast("Book has been added", {
+                description: formatDate(data.data.createdAt),
+                action: {
+                    label: "Close",
+                    onClick: () => console.log("closed"),
+                },
+            })
+        }
+    }, [isSuccess, setOpen]);
 
     return (
         isLoading ?

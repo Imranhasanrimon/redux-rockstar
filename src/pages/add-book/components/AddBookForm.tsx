@@ -25,6 +25,7 @@ import { useEffect, type Dispatch, type SetStateAction } from "react"
 import { LoaderCircle } from "lucide-react"
 import { toast } from "sonner"
 import { formatDate } from "@/utils/formateDate"
+import { useNavigate } from "react-router-dom"
 
 
 
@@ -38,9 +39,11 @@ const formSchema = z.object({
     genre: z.string().min(2, {
         message: "Select the category of the book",
     }),
-    isbn: z.string().min(10, {
-        message: "ISBN must be at least 10 characters.",
-    }),
+    isbn: z.string()
+        .length(10, { message: "ISBN must be exactly 10 digits." })
+        .regex(/^\d+$/, {
+            message: "ISBN must contain only digits."
+        }),
     description: z.string().min(5, {
         message: "Description must be at least 5 characters.",
     }),
@@ -55,6 +58,7 @@ type AddBookFormProps = {
 }
 
 export default function AddBookForm({ setOpen }: AddBookFormProps) {
+    const navigate = useNavigate()
     const [addBook, { isLoading, isSuccess, data, isError }] = useAddBookMutation()
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -92,6 +96,7 @@ export default function AddBookForm({ setOpen }: AddBookFormProps) {
                     onClick: () => console.log("closed"),
                 },
             })
+            navigate("/books")
         }
         if (isError) {
             toast("Book has not been added ❌", {

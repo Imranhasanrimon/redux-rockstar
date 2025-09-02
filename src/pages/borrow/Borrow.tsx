@@ -59,7 +59,7 @@ export default function Borrow() {
     useEffect(() => {
         if (isSuccess) {
             form.reset()
-            toast("Book has been borrowed", {
+            toast("Book has been borrowed ✅", {
                 description: formatDate(borrowData.data.createdAt),
                 action: {
                     label: "Close",

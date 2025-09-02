@@ -8,6 +8,9 @@ import UpdateBookModal from "./UpdateBookModal";
 import { toast } from "sonner";
 import { formatDate } from "@/utils/formateDate";
 import { cn } from "@/lib/utils";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { useState } from "react";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -89,12 +92,14 @@ export const columns: ColumnDef<IBook>[] = [
         id: "delete",
         header: "Delete",
         cell: ({ row }) => {
+            const [open, setOpen] = useState(false)
             const [deleteBook, { isLoading, }] = useDeleteBookMutation()
             const book = row.original as IBook
             const handleDelete = async () => {
                 try {
                     await deleteBook(book._id).unwrap() // unwrap waits for success/error
-                    toast("Book has been deleted", {
+                    setOpen(false)
+                    toast("Book has been deleted ✅", {
                         description: formatDate(new Date().toISOString()),
                         action: {
                             label: "Close",
@@ -110,16 +115,39 @@ export const columns: ColumnDef<IBook>[] = [
 
             return (
                 <div>
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={handleDelete}
-                        disabled={isLoading}
-                    >
-                        {isLoading ?
-                            <LoaderCircle className="animate-spin text-red-500" /> :
-                            < Trash className="text-red-500" />}
-                    </Button>
+                    <Dialog open={open} onOpenChange={setOpen}>
+                        <DialogTrigger asChild>
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                            >
+                                < Trash className="text-red-500" />
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-md">
+                            <DialogHeader>
+                                <DialogTitle className="text-center">Delete Book</DialogTitle>
+                                <DialogDescription className="text-center">
+                                    Deleting this book will remove it permanently from the library system. Do you want to proceed?.
+                                </DialogDescription>
+                            </DialogHeader>
+                            <div className="flex items-center justify-between gap-2 max-w-[200px] mx-auto">
+                                <Button
+                                    variant="destructive"
+                                    onClick={handleDelete}
+                                    disabled={isLoading}
+                                >{isLoading ?
+                                    <LoaderCircle className="animate-spin" /> : "Yes"
+                                    }</Button>
+
+                                <Button
+                                    variant="outline"
+                                    disabled={isLoading}
+                                    onClick={() => setOpen(false)}
+                                >No</Button>
+                            </div>
+                        </DialogContent>
+                    </Dialog>
                 </div>
             )
         },

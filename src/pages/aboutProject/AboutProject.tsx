@@ -4,10 +4,10 @@ import { Badge } from "@/components/ui/badge"
 
 export default function AboutProject() {
     return (
-        <div className="max-w-4xl mx-auto w-11/12 px-4 py-10">
+        <div className="max-w-3xl mx-auto w-11/12 py-10">
             <Card className="shadow-lg">
                 <CardHeader>
-                    <CardTitle className="text-2xl font-bold">About This Project</CardTitle>
+                    <CardTitle className="text-xl md:text-2xl text-center font-semibold">About This Project</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6 text-muted-foreground">
 

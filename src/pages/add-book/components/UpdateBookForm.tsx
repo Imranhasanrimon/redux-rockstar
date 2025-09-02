@@ -38,9 +38,11 @@ const formSchema = z.object({
     genre: z.string().min(2, {
         message: "Select the category of the book",
     }),
-    isbn: z.string().min(10, {
-        message: "ISBN must be at least 10 characters.",
-    }),
+    isbn: z.string()
+        .length(10, { message: "ISBN must be exactly 10 digits." })
+        .regex(/^\d+$/, {
+            message: "ISBN must contain only digits."
+        }),
     description: z.string().min(5, {
         message: "Description must be at least 5 characters.",
     }),
@@ -82,7 +84,7 @@ export default function UpdateBookForm({ book, setOpen }: UpdateBookModalProps) 
         if (isSuccess) {
             setOpen?.(false);
             form.reset();
-            toast("Book has been Updated", {
+            toast("Book has been Updated ✅", {
                 description: formatDate(data.data.updatedAt),
                 action: {
                     label: "Close",

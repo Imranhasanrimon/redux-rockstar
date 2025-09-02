@@ -4,6 +4,7 @@ import BookCard from "./components/BookCard";
 import type { IBook } from "../books/components/Columns";
 import { LoaderCircle } from "lucide-react";
 import BookSummary from "../borrowSummary/BorrowSummary";
+import AboutProject from "../aboutProject/AboutProject";
 
 export default function Home() {
     const { data, isLoading } = useGetBooksQuery(undefined)
@@ -29,9 +30,10 @@ export default function Home() {
             </div>
 
             <div>
-
                 <BookSummary />
             </div>
+
+            <AboutProject />
         </div>
     )
 }

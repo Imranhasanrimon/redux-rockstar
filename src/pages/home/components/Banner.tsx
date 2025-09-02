@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 
 export default function Banner() {
     return (
-        <section className="relative w-full bg-slate-100 dark:bg-gradient-to-r dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 text-center py-20 md:py-28">
+        <section className="relative w-full h-screen bg-slate-100 dark:bg-gradient-to-r dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 text-center flex flex-col items-center justify-center">
             <div className="mx-auto max-w-4xl px-6">
 
                 {/* Heading */}

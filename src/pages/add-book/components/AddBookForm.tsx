@@ -55,7 +55,7 @@ type AddBookFormProps = {
 }
 
 export default function AddBookForm({ setOpen }: AddBookFormProps) {
-    const [addBook, { isLoading, isSuccess, data }] = useAddBookMutation()
+    const [addBook, { isLoading, isSuccess, data, isError }] = useAddBookMutation()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -71,7 +71,12 @@ export default function AddBookForm({ setOpen }: AddBookFormProps) {
     })
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
-        await addBook({ ...values, available: values.copies > 0 })
+        try {
+            await addBook({ ...values, available: values.copies > 0 })
+        } catch (error) {
+            console.log("error occured");
+            console.log(error);
+        }
 
     }
 
@@ -80,7 +85,7 @@ export default function AddBookForm({ setOpen }: AddBookFormProps) {
         if (isSuccess) {
             setOpen?.(false);
             form.reset()
-            toast("Book has been added", {
+            toast("Book has been added ✅", {
                 description: formatDate(data.data.createdAt),
                 action: {
                     label: "Close",
@@ -88,7 +93,16 @@ export default function AddBookForm({ setOpen }: AddBookFormProps) {
                 },
             })
         }
-    }, [isSuccess, setOpen]);
+        if (isError) {
+            toast("Book has not been added ❌", {
+                description: "Provide unique ISBN",
+                action: {
+                    label: "Close",
+                    onClick: () => console.log("closed"),
+                },
+            })
+        }
+    }, [isSuccess, setOpen, isError]);
 
     return (
         isLoading ?

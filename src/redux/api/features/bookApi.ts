@@ -14,7 +14,7 @@ export const bookApi = baseApi.injectEndpoints({
         }),
 
         getBook: builder.query({
-            query: (id: string) => `books/${id}`,
+            query: (id) => `books/${id}`,
             providesTags: (result, error, id) => [{ type: "Books", id }],
         }),
 
@@ -32,7 +32,7 @@ export const bookApi = baseApi.injectEndpoints({
                 url: `books/${id}`,
                 method: "DELETE",
             }),
-            invalidatesTags: (result, error, id) => [{ type: "Books", id }],
+            invalidatesTags: (result, error, id) => [{ type: "Books", id }, { type: "Borrow", id: "LIST" },],
         }),
 
         editBook: builder.mutation({

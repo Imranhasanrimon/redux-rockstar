@@ -25,12 +25,21 @@ export default function BookSummary() {
             </div>
         )
     }
-
+    if (!data?.data || data.data.length === 0) {
+        return (
+            <div className="flex flex-col items-center justify-center h-[90vh]">
+                <h2 className="text-2xl font-bold text-slate-600">No Orders Found</h2>
+                <Button variant="outline" onClick={() => refetch()} className="mt-4">
+                    Refresh
+                </Button>
+            </div>
+        )
+    }
     return (
-        <div className="max-w-3xl mx-auto w-11/12 px-4 py-8">
+        <div className="max-w-3xl mx-auto w-11/12 py-8">
             <Card className="shadow-lg">
                 <CardHeader>
-                    <CardTitle className="text-2xl font-semibold">Borrowed Books Summary</CardTitle>
+                    <CardTitle className="text-xl md:text-2xl text-center font-semibold">Borrowed Books Summary</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <Table>

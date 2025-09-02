@@ -15,7 +15,7 @@ export const bookApi = baseApi.injectEndpoints({
 
         getBook: builder.query({
             query: (id) => `books/${id}`,
-            providesTags: (result, error, id) => [{ type: "Books", id }],
+            providesTags: (_result, _error, id) => [{ type: "Books", id }],
         }),
 
         addBook: builder.mutation({
@@ -32,7 +32,7 @@ export const bookApi = baseApi.injectEndpoints({
                 url: `books/${id}`,
                 method: "DELETE",
             }),
-            invalidatesTags: (result, error, id) => [{ type: "Books", id }, { type: "Borrow", id: "LIST" },],
+            invalidatesTags: (_result, _error, id) => [{ type: "Books", id }, { type: "Borrow", id: "LIST" },],
         }),
 
         editBook: builder.mutation({
@@ -41,7 +41,7 @@ export const bookApi = baseApi.injectEndpoints({
                 method: "PUT",
                 body: data.body,
             }),
-            invalidatesTags: (result, error, { _id }) => [{ type: "Books", id: _id }],
+            invalidatesTags: (_result, _error, { _id }) => [{ type: "Books", id: _id }],
         }),
     }),
 });

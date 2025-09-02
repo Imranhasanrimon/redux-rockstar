@@ -1,10 +1,6 @@
 import {
     Menubar,
-    MenubarContent,
-    MenubarItem,
     MenubarMenu,
-    MenubarSeparator,
-    MenubarShortcut,
     MenubarTrigger,
 } from "@/components/ui/menubar"
 import { ModeToggle } from "@/components/ui/mode-toggle"

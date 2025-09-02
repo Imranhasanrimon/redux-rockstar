@@ -9,7 +9,6 @@ import { toast } from "sonner";
 import { formatDate } from "@/utils/formateDate";
 import { cn } from "@/lib/utils";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
 import { useState } from "react";
 
 // This type is used to define the shape of our data.

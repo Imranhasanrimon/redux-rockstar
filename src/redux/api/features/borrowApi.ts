@@ -19,7 +19,7 @@ export const borrowApi = baseApi.injectEndpoints({
                 method: "POST",
                 body,
             }),
-            invalidatesTags: (result, error, body) => [
+            invalidatesTags: (_result, _error, body) => [
                 { type: "Borrow", id: "LIST" },
                 { type: "Books", id: body.book },
                 { type: "Books", id: "LIST" },

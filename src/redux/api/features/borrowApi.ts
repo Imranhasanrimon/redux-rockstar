@@ -1,8 +1,9 @@
+import type { BorrowRequest, BorrowResponse, BorrowSummaryResponse } from "@/redux/types";
 import { baseApi } from "./baseApi";
 
 export const borrowApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
-        borrowSummary: builder.query<any, void>({
+        borrowSummary: builder.query<BorrowSummaryResponse, void>({
             query: () => "borrow",
             providesTags: (result) =>
                 result?.data
@@ -13,7 +14,7 @@ export const borrowApi = baseApi.injectEndpoints({
                     : [{ type: "Borrow" as const, id: "LIST" }],
         }),
 
-        borrowABook: builder.mutation<any, { book: string; dueDate: string | null; quantity: number }>({
+        borrowABook: builder.mutation<BorrowResponse, BorrowRequest>({
             query: (body) => ({
                 url: "borrow",
                 method: "POST",

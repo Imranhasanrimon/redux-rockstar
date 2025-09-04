@@ -1,24 +1,25 @@
+import type { AddBookRequest, AddBookResponse, Book, BookListResponse, BookResponse, DeleteBookResponse, EditBookRequest } from "@/redux/types";
 import { baseApi } from "./baseApi";
 
 export const bookApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
-        getBooks: builder.query({
+        getBooks: builder.query<BookListResponse, void>({
             query: () => "books",
             providesTags: (result) =>
                 result
                     ? [
-                        ...result.data.map((book: any) => ({ type: "Books", id: book._id })),
-                        { type: "Books", id: "LIST" },
+                        ...result.data.map((book: Book) => ({ type: "Books" as const, id: book._id })),
+                        { type: "Books" as const, id: "LIST" },
                     ]
-                    : [{ type: "Books", id: "LIST" }],
+                    : [{ type: "Books" as const, id: "LIST" }],
         }),
 
-        getBook: builder.query({
+        getBook: builder.query<BookResponse, string>({
             query: (id) => `books/${id}`,
             providesTags: (_result, _error, id) => [{ type: "Books", id }],
         }),
 
-        addBook: builder.mutation({
+        addBook: builder.mutation<AddBookResponse, AddBookRequest>({
             query: (body) => ({
                 url: "books",
                 method: "POST",
@@ -27,7 +28,7 @@ export const bookApi = baseApi.injectEndpoints({
             invalidatesTags: [{ type: "Books", id: "LIST" }],
         }),
 
-        deleteBook: builder.mutation({
+        deleteBook: builder.mutation<DeleteBookResponse, string>({
             query: (id: string) => ({
                 url: `books/${id}`,
                 method: "DELETE",
@@ -35,7 +36,7 @@ export const bookApi = baseApi.injectEndpoints({
             invalidatesTags: (_result, _error, id) => [{ type: "Books", id }, { type: "Borrow", id: "LIST" },],
         }),
 
-        editBook: builder.mutation({
+        editBook: builder.mutation<BookResponse, EditBookRequest>({
             query: (data: { _id: string; body: any }) => ({
                 url: `books/${data._id}`,
                 method: "PUT",

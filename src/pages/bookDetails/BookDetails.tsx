@@ -1,3 +1,4 @@
+import { skipToken } from "@reduxjs/toolkit/query";
 import { useParams, Link } from "react-router-dom"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -8,7 +9,7 @@ import { useGetBookQuery } from "@/redux/api/features/bookApi"
 
 export default function BookDetails() {
     const { id } = useParams<{ id: string }>()
-    const { data, isLoading, isError } = useGetBookQuery(id)
+    const { data, isLoading, isError } = useGetBookQuery(id ?? skipToken)
 
     if (isLoading) {
         return <div className="flex justify-center  mt-70">

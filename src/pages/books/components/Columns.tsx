@@ -10,25 +10,14 @@ import { formatDate } from "@/utils/formateDate";
 import { cn } from "@/lib/utils";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useState } from "react";
+import type { Book } from "@/redux/types";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-export type IBook = {
-    _id: string;
-    title: string;
-    author: string;
-    genre: string;
-    isbn: string;
-    description: string;
-    copies: number;
-    available: boolean;
-    createdAt: string;
-    updatedAt: string;
-}
 
 
 
-export const columns: ColumnDef<IBook>[] = [
+export const columns: ColumnDef<Book>[] = [
     {
         accessorKey: "title",
         header: "Title",
@@ -57,7 +46,7 @@ export const columns: ColumnDef<IBook>[] = [
         id: "available",
         header: "Available",
         cell: ({ row }) => {
-            const book = row.original as IBook
+            const book = row.original as Book
 
             return (
                 <span
@@ -78,7 +67,7 @@ export const columns: ColumnDef<IBook>[] = [
         header: "Update",
         cell: ({ row }) => {
 
-            const book = row.original as IBook
+            const book = row.original as Book
 
             return (
                 <div>
@@ -93,7 +82,7 @@ export const columns: ColumnDef<IBook>[] = [
         cell: ({ row }) => {
             const [open, setOpen] = useState(false)
             const [deleteBook, { isLoading, }] = useDeleteBookMutation()
-            const book = row.original as IBook
+            const book = row.original as Book
             const handleDelete = async () => {
                 try {
                     await deleteBook(book._id).unwrap() // unwrap waits for success/error
@@ -155,7 +144,7 @@ export const columns: ColumnDef<IBook>[] = [
         id: "borrow",
         header: "Borrow",
         cell: ({ row }) => {
-            const book = row.original as IBook
+            const book = row.original as Book
             const navigate = useNavigate()
 
             return (

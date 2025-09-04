@@ -8,12 +8,12 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import UpdateBookForm from "@/pages/add-book/components/UpdateBookForm"
+import type { Book } from "@/redux/types"
 import { Edit } from "lucide-react"
-import type { IBook } from "./Columns"
 import { useState, type Dispatch, type SetStateAction } from "react"
 
 export type UpdateBookModalProps = {
-    book: IBook;
+    book: Book;
     setOpen?: Dispatch<SetStateAction<boolean>>
 }
 export default function UpdateBookModal({ book }: UpdateBookModalProps) {

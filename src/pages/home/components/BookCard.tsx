@@ -3,11 +3,11 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { BookOpen, User, Calendar } from "lucide-react"
 import { formatDate } from "@/utils/formateDate"
-import type { IBook } from "@/pages/books/components/Columns"
 import { Link } from "react-router-dom"
+import type { Book } from "@/redux/types"
 
 interface BookCardProps {
-    book: IBook
+    book: Book
 }
 
 export default function BookCard({ book }: BookCardProps) {
